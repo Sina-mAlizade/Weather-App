@@ -31,7 +31,7 @@ A simple and responsive weather application built with *Django* that provides de
 
 🚀 Installation
 1. Clone the repository
-git clone https://github.com/Sina-mAlizade/Weather-App.gi
+git clone https://github.com/Sina-mAlizade/Weather-App.git
 
 
 3. Enter the project directory
