@@ -36,7 +36,7 @@ git clone https://github.com/Sina-mAlizade/Weather-App.git
 
 3. Enter the project directory
 
-cd Weather-App
+cd Weather-App-main
 
 
 3. Create a virtual environment
@@ -56,6 +56,7 @@ pip install -r requirements.txt
 
 
 🔑 API Key
+
 This project uses the *OpenWeather API* to retrieve weather information.
 For security reasons, the API key is not included in this repository.
 Before running the project, you need to add your own API key.
