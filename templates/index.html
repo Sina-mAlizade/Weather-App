@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        :root {
+            --primary: #4f7cff;
+            --primary-dark: #3a5fd9;
+            --bg-1: #74b9ff;
+            --bg-2: #4f7cff;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --error: #e63946;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem 1.5rem;
+            background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+            color: var(--text-dark);
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            letter-spacing: 0.5px;
+        }
+
+        form {
+            display: flex;
+            gap: 0.6rem;
+            background: var(--card-bg);
+            padding: 0.6rem;
+            border-radius: 50px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            backdrop-filter: blur(6px);
+            width: 100%;
+            max-width: 420px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 0.7rem 1.1rem;
+            border-radius: 50px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            background: transparent;
+        }
+
+        button {
+            padding: 0.7rem 1.4rem;
+            border: none;
+            border-radius: 50px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .error {
+            margin-top: 1.2rem;
+            background: #fff0f0;
+            color: var(--error);
+            padding: 0.7rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .weather {
+            margin-top: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(6px);
+            padding: 2rem 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .weather h2 {
+            margin: 0 0 0.3rem;
+            font-size: 1.6rem;
+        }
+
+        .weather .icon-wrap {
+            width: 110px;
+            height: 110px;
+            margin: -0.5rem auto 0;
+            border-radius: 50%;
+            background: radial-gradient(circle at 32% 30%, #eef4ff, #cfe0ff);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .weather .icon-wrap img {
+            width: 92px;
+            height: 92px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+        }
+
+        .weather .temp {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0.2rem 0;
+        }
+
+        .weather .desc {
+            color: var(--text-light);
+            font-size: 1.05rem;
+            text-transform: capitalize;
+            margin-bottom: 1rem;
+        }
+
+        .feels-like {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: -0.3rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .stats .aqi-desc {
+            font-size: 0.62rem;
+            font-weight: 600;
+            line-height: 1.1;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.3rem 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .stats .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.15rem;
+        }
+
+        .stats .icon {
+            font-size: 1.15rem;
+            line-height: 1;
+        }
+
+        .stats .label {
+            font-size: 0.68rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: auto;
+        }
+
+        .stats .value {
+            font-size: 0.98rem;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .minmax {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            font-size: 0.88rem;
+            color: var(--text-light);
+            margin-bottom: 0.4rem;
+        }
+
+        .minmax .low { color: #4f7cff; font-weight: 600; }
+        .minmax .high { color: #e6795a; font-weight: 600; }
+
+        .map-wrap {
+            margin-top: 1.2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .map-wrap iframe {
+            width: 100%;
+            height: 180px;
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .map-wrap .coords {
+            margin-top: 0.5rem;
+            font-size: 0.78rem;
+            color: var(--text-light);
+        }
+
+        .recent {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .recent h3 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 0.8rem;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.15);
+            font-size: 1.1rem;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        li {
+            background: var(--card-bg);
+            backdrop-filter: blur(6px);
+            padding: 0.7rem 1.2rem;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            font-size: 0.92rem;
+        }
+
+        li .city {
+            font-weight: 600;
+        }
+
+        li .temp {
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        li .desc {
+            color: var(--text-light);
+            text-transform: capitalize;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .weather { padding: 1.5rem; }
+            .stats { gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🌤 Weather App</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="city" placeholder="Enter city name" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {% if weather %}
+        <div class="weather">
+            <h2>{{ weather.city }}</h2>
+            <div class="icon-wrap">
+                <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" alt="Weather icon">
+            </div>
+            <div class="temp">{{ weather.temperature }}°C</div>
+            {% if weather.feels_like %}
+                <div class="feels-like">Feels like {{ weather.feels_like }}°C</div>
+            {% endif %}
+            {% if weather.temp_min and weather.temp_max %}
+                <div class="minmax">
+                    <span class="low">↓ {{ weather.temp_min }}°C</span>
+                    <span class="high">↑ {{ weather.temp_max }}°C</span>
+                </div>
+            {% endif %}
+            <div class="desc">{{ weather.description }}</div>
+            <div class="stats">
+                <div class="stat">
+                    <span class="icon">💧</span>
+                    <span class="value">{{ weather.humidity }}%</span>
+                    <span class="label">Humidity</span>
+                </div>
+                <div class="stat">
+                    <span class="icon">🌡️</span>
+                    <span class="value">{{ weather.pressure }} hPa</span>
+                    <span class="label">Pressure</span>
+                </div>
+                {% if weather.wind_speed %}
+                <div class="stat">
+                    <span class="icon">💨</span>
+                    <span class="value">{{ weather.wind_speed }} m/s {{ weather.wind_direction }}</span>
+                    <span class="label">Wind</span>
+                </div>
+                {% endif %}
+                {% if weather.visibility %}
+                <div class="stat">
+                    <span class="icon">👁️</span>
+                    <span class="value">{{ weather.visibility|floatformat:0 }} m</span>
+                    <span class="label">Visibility</span>
+                </div>
+                {% endif %}
+                {% if weather.cloudiness is not None %}
+                <div class="stat">
+                    <span class="icon">☁️</span>
+                    <span class="value">{{ weather.cloudiness }}%</span>
+                    <span class="label">Cloudiness</span>
+                </div>
+                {% endif %}
+                {% if weather.uv_index %}
+                    <div class="stat">
+                        <span class="icon">☀️</span>
+                        <span class="value">{{ weather.uv_index }}</span>
+                        <span class="label">UV Index</span>
+                    </div>
+                {% endif %}
+                {% if weather.sunrise %}
+                <div class="stat">
+                    <span class="icon">🌅</span>
+                    <span class="value">{{ weather.sunrise }}</span>
+                    <span class="label">Sunrise</span>
+                </div>
+                {% endif %}
+                {% if weather.sunset %}
+                <div class="stat">
+                    <span class="icon">🌇</span>
+                    <span class="value">{{ weather.sunset }}</span>
+                    <span class="label">Sunset</span>
+                </div>
+                {% endif %}
+                {% if weather.aqi %}
+                <div class="stat">
+                    <span class="value" style="color: {{ weather.aqi_color }};">{{ weather.aqi }}</span>
+                    <span class="aqi-desc" style="color: {{ weather.aqi_color }};">{{ weather.aqi_label }}</span>
+                    <span class="label">Air Quality</span>
+                </div>
+                {% endif %}
+            </div>
+            {% if weather.map_url %}
+            <div class="map-wrap">
+                <iframe src="{{ weather.map_url }}" loading="lazy"></iframe>
+                <div class="coords">{{ weather.latitude }}, {{ weather.longitude }}</div>
+            </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if recent_searches %}
+        <div class="recent">
+            <h3>Recent Searches</h3>
+            <ul>
+                {% for search in recent_searches %}
+                    <li>
+                        <span class="city">{{ search.city_name }}</span>
+                        <span class="desc">{{ search.description }}</span>
+                        <span class="temp">{{ search.temperature }}°C</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</body>
+</html>
