@@ -30,33 +30,24 @@ A simple and responsive weather application built with *Django* that provides de
 - Open-Meteo API
 
 🚀 Installation
+```bash
 1. Clone the repository
 git clone https://github.com/Sina-mAlizade/Weather-App.git
 
-
-3. Enter the project directory
-
-cd Weather-App-main
-
+2. Enter the project directory
+cd Weather-App
 
 3. Create a virtual environment
-
 python -m venv .venv
-
 
 4. Activate the virtual environment
 Windows:
-
 .venv\Scripts\activate
 
-
 5. Install the required packages
-
 pip install -r requirements.txt
 
-
 🔑 API Key
-
 This project uses the *OpenWeather API* to retrieve weather information.
 For security reasons, the API key is not included in this repository.
 Before running the project, you need to add your own API key.
@@ -71,11 +62,8 @@ YOUR_API_KEY
 with your own OpenWeather API key.
 
 ▶️ Run the Project
-
 After adding your API key, run the Django development server:
-
 python manage.py runserver
-
-
+Open: http://127.0.0.1:8000/
 
 Made with ❤️ using Django and Python.
